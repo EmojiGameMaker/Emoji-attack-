@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catch the Emoji! 🎯</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      background-color: #fefefe;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    #score, #level {
+      font-size: 20px;
+      margin: 10px;
+    }
+    #emoji {
+      font-size: 50px;
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #emoji:hover {
+      transform: scale(1.2);
+    }
+    #win-message {
+      font-size: 32px;
+      color: green;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Catch the Emoji! 🎮</h1>
+<p id="score">Score: 0</p>
+<p id="level">Level: 1</p>
+<div id="emoji">🎯</div>
+<div id="win-message"></div>
+
+<script>
+  const emoji = document.getElementById("emoji");
+  const scoreDisplay = document.getElementById("score");
+  const levelDisplay = document.getElementById("level");
+  const winMessage = document.getElementById("win-message");
+
+  let score = 0;
+  let level = 1;
+  let interval = 2000; // 2 seconds
+  let intervalId;
+
+  function moveEmoji() {
+    const x = Math.random() * (window.innerWidth - 60);
+    const y = Math.random() * (window.innerHeight - 60);
+    emoji.style.left = x + "px";
+    emoji.style.top = y + "px";
+  }
+
+  function levelUp() {
+    if (level >= 100) {
+      winMessage.textContent = "🎉 YOU WIN! Level 100 completed!";
+      clearInterval(intervalId);
+      emoji.style.display = "none";
+      return;
+    }
+
+    level++;
+    interval = Math.max(300, interval - 15); // make it faster
+    levelDisplay.textContent = "Level: " + level;
+
+    clearInterval(intervalId);
+    intervalId = setInterval(moveEmoji, interval);
+  }
+
+  emoji.addEventListener("click", () => {
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+
+    if (score % 5 === 0) {
+      levelUp();
+    }
+
+    moveEmoji();
+  });
+
+  // Start the game
+  moveEmoji();
+  intervalId = setInterval(moveEmoji, interval);
+</script>
+
+</body>
+</html>
